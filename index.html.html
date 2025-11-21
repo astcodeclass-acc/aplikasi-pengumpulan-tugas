@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Pengumpulan Tugas Online</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #4a6fa5;
+            padding: 25px 0;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #4a6fa5, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            color: #666;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .form-section {
+            flex: 1;
+            min-width: 350px;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+        }
+        
+        .submissions-section {
+            flex: 1;
+            min-width: 350px;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        h2 {
+            color: #4a6fa5;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: #4a6fa5;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .file-input {
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #4a6fa5, #5a7fb5);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(74, 111, 165, 0.3);
+        }
+        
+        .btn:hover {
+            background: linear-gradient(45deg, #3a5a8a, #4a6fa5);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 111, 165, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .submission-item {
+            background-color: #f9f9f9;
+            padding: 18px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4a6fa5;
+            transition: transform 0.2s;
+        }
+        
+        .submission-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .submission-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .submission-name {
+            font-weight: 600;
+            color: #4a6fa5;
+        }
+        
+        .submission-date {
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .submission-task {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .submission-comment {
+            color: #555;
+            font-style: italic;
+            margin-top: 8px;
+            padding: 8px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #777;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+        
+        .online-indicator {
+            display: inline-flex;
+            align-items: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        
+        .online-indicator::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background-color: white;
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Aplikasi Pengumpulan Tugas Online <span class="online-indicator">Online</span></h1>
+            <p class="subtitle">Kirim dan kelola tugas dari mana saja, kapan saja</p>
+        </header>
+        
+        <div class="main-content">
+            <section class="form-section">
+                <h2>Kirim Tugas Baru</h2>
+                <form id="submissionForm">
+                    <div class="form-group">
+                        <label for="name">Nama Lengkap</label>
+                        <input type="text" id="name" name="name" required placeholder="Masukkan nama lengkap">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nim">NIM</label>
+                        <input type="text" id="nim" name="nim" required placeholder="Masukkan NIM">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="task">Judul Tugas</label>
+                        <select id="task" name="task" required>
+                            <option value="">Pilih Tugas</option>
+                            <option value="Tugas 1: Analisis Sistem">Tugas 1: Analisis Sistem</option>
+                            <option value="Tugas 2: Desain Database">Tugas 2: Desain Database</option>
+                            <option value="Tugas 3: Implementasi UI/UX">Tugas 3: Implementasi UI/UX</option>
+                            <option value="Tugas 4: Testing dan Debugging">Tugas 4: Testing dan Debugging</option>
+                            <option value="Tugas 5: Laporan Akhir">Tugas 5: Laporan Akhir</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="file">Unggah File Tugas</label>
+                        <input type="file" id="file" name="file" class="file-input" required>
+                        <small style="color: #777; display: block; margin-top: 5px;">Format yang didukung: PDF, DOC, DOCX, ZIP (Maks. 10MB)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="comment">Komentar (Opsional)</label>
+                        <textarea id="comment" name="comment" placeholder="Tambahkan catatan atau komentar tentang tugas yang dikumpulkan..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn">Kirim Tugas</button>
+                </form>
+            </section>
+            
+            <section class="submissions-section">
+                <h2>Tugas yang Telah Dikumpulkan</h2>
+                <div id="submissionsList">
+                    <div class="empty-state">
+                        <i>📁</i>
+                        <p>Belum ada tugas yang dikumpulkan</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <footer>
+            <p>&copy; 2023 Aplikasi Pengumpulan Tugas Online | Hosting Gratis dengan Netlify</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('submissionForm');
+            const submissionsList = document.getElementById('submissionsList');
+            
+            // Load existing submissions from localStorage
+            loadSubmissions();
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const name = document.getElementById('name').value;
+                const nim = document.getElementById('nim').value;
+                const task = document.getElementById('task').value;
+                const fileInput = document.getElementById('file');
+                const comment = document.getElementById('comment').value;
+                
+                // Validate file size (max 10MB)
+                if (fileInput.files[0] && fileInput.files[0].size > 10 * 1024 * 1024) {
+                    alert('Ukuran file terlalu besar! Maksimal 10MB.');
+                    return;
+                }
+                
+                // Get file name
+                const fileName = fileInput.files[0] ? fileInput.files[0].name : 'Tidak ada file';
+                
+                // Create submission object
+                const submission = {
+                    id: Date.now(),
+                    name: name,
+                    nim: nim,
+                    task: task,
+                    fileName: fileName,
+                    comment: comment,
+                    date: new Date().toLocaleString('id-ID')
+                };
+                
+                // Save to localStorage
+                saveSubmission(submission);
+                
+                // Add to UI
+                addSubmissionToUI(submission);
+                
+                // Reset form
+                form.reset();
+                
+                // Show success message
+                alert('Tugas berhasil dikumpulkan!');
+            });
+            
+            function saveSubmission(submission) {
+                let submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+                submissions.unshift(submission); // Add to beginning of array
+                localStorage.setItem('submissions', JSON.stringify(submissions));
+            }
+            
+            function loadSubmissions() {
+                const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+                
+                if (submissions.length === 0) {
+                    submissionsList.innerHTML = '<div class="empty-state"><i>📁</i><p>Belum ada tugas yang dikumpulkan</p></div>';
+                    return;
+                }
+                
+                submissionsList.innerHTML = '';
+                submissions.forEach(submission => {
+                    addSubmissionToUI(submission);
+                });
+            }
+            
+            function addSubmissionToUI(submission) {
+                // Remove empty state if exists
+                if (submissionsList.querySelector('.empty-state')) {
+                    submissionsList.innerHTML = '';
+                }
+                
+                const submissionElement = document.createElement('div');
+                submissionElement.className = 'submission-item';
+                submissionElement.innerHTML = `
+                    <div class="submission-header">
+                        <span class="submission-name">${submission.name} (${submission.nim})</span>
+                        <span class="submission-date">${submission.date}</span>
+                    </div>
+                    <div class="submission-task">${submission.task}</div>
+                    <div class="submission-file">File: ${submission.fileName}</div>
+                    ${submission.comment ? `<div class="submission-comment">"${submission.comment}"</div>` : ''}
+                `;
+                
+                submissionsList.appendChild(submissionElement);
+            }
+        });
+    </script>
+</body>
+</html>
